@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FirestoreService } from '../../services/firestore.service';
 
 @Component({
   selector: 'app-register',
@@ -6,11 +7,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.page.scss'],
   standalone: false,
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage {
 
-  constructor() { }
+  usuario = {
+    nombre: '',
+    email: '',
+    fechaRegistro: new Date()
+  };
 
-  ngOnInit() {
+  constructor(private firestoreService: FirestoreService) { }
+
+  // Método para guardar el usuario en Firestore
+  async registrarUsuario() {
+    try {
+      // Llama al servicio para agregar el usuario
+      await this.firestoreService.agregarUsuario(this.usuario);
+      console.log('Usuario registrado correctamente');
+      this.limpiarFormulario(); // Limpia el formulario después de guardar
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+    }
   }
 
+  // Método para limpiar el formulario
+  limpiarFormulario() {
+    this.usuario = {
+      nombre: '',
+      email: '',
+      fechaRegistro: new Date()
+    };
+  }
 }
