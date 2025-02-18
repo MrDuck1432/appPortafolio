@@ -1,19 +1,149 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Registro de Usuario</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <div class="floating-title">
+      <ion-title>Registro de Usuario</ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>
-    <ion-label position="floating">Nombre</ion-label>
-    <ion-input [(ngModel)]="usuario.nombre"></ion-input>
-  </ion-item>
+<ion-content class="ion-padding">
+  <form [formGroup]="registroForm" (ngSubmit)="register()">
+    <div class="input-container">
+      <ion-input 
+        label="Nombres" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="Ingrese sus nombres"
+        formControlName="nombres">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('nombres')?.touched && registroForm.get('nombres')?.errors?.['required']">
+          <small>Los nombres son requeridos</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('nombres')?.touched && registroForm.get('nombres')?.errors?.['minlength']">
+          <small>Debe tener al menos 2 caracteres</small>
+        </ion-text>
+      </div>
+    </div>
 
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" [(ngModel)]="usuario.email"></ion-input>
-  </ion-item>
+    <div class="input-container">
+      <ion-input 
+        label="Apellido Paterno" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="Ingrese su apellido paterno"
+        formControlName="apellidoPaterno">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('apellidoPaterno')?.touched && registroForm.get('apellidoPaterno')?.errors?.['required']">
+          <small>El apellido paterno es requerido</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('apellidoPaterno')?.touched && registroForm.get('apellidoPaterno')?.errors?.['minlength']">
+          <small>Debe tener al menos 2 caracteres</small>
+        </ion-text>
+      </div>
+    </div>
 
-  <ion-button expand="full" (click)="registrarUsuario()">Registrar Usuario</ion-button>
+    <div class="input-container">
+      <ion-input 
+        label="Apellido Materno" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="Ingrese su apellido materno"
+        formControlName="apellidoMaterno">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('apellidoMaterno')?.touched && registroForm.get('apellidoMaterno')?.errors?.['required']">
+          <small>El apellido materno es requerido</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('apellidoMaterno')?.touched && registroForm.get('apellidoMaterno')?.errors?.['minlength']">
+          <small>Debe tener al menos 2 caracteres</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <ion-input 
+        label="Fecha de Nacimiento" 
+        label-placement="floating" 
+        fill="outline" 
+        type="date"
+        formControlName="fechaNacimiento">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('fechaNacimiento')?.touched && registroForm.get('fechaNacimiento')?.errors?.['required']">
+          <small>La fecha de nacimiento es requerida</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <ion-input 
+        label="Correo Electrónico" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="ejemplo@correo.com"
+        type="email"
+        formControlName="correo">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.errors?.['required']">
+          <small>El correo electrónico es requerido</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.errors?.['email']">
+          <small>Ingrese un correo electrónico válido</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <ion-input 
+        label="Contraseña" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="********"
+        type="password"
+        formControlName="password">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.errors?.['required']">
+          <small>La contraseña es requerida</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.errors?.['minlength']">
+          <small>Debe tener al menos 6 caracteres</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <ion-input 
+        label="Confirmar Contraseña" 
+        label-placement="floating" 
+        fill="outline" 
+        placeholder="********"
+        type="password"
+        formControlName="confirmPassword">
+      </ion-input>
+      <div class="error-container">
+        <ion-text color="danger" *ngIf="registroForm.get('confirmPassword')?.touched && registroForm.get('confirmPassword')?.errors?.['required']">
+          <small>Confirme la contraseña</small>
+        </ion-text>
+        <ion-text color="danger" *ngIf="registroForm.get('confirmPassword')?.touched && registroForm.hasError('notSame')">
+          <small>Las contraseñas no coinciden</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <ion-button 
+      expand="block" 
+      type="submit" 
+      [disabled]="!registroForm.valid">
+      Registrarse
+    </ion-button>
+  </form>
 </ion-content>
+
+

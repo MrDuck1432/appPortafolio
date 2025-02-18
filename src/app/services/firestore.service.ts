@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Injectable, inject } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { doc, setDoc, Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
+  private firestore: Firestore = inject(Firestore);
+  constructor(
+    public database: AngularFirestore
+  ) { }
 
-  constructor(private firestore: Firestore) { }
+  crearDoc(path: string,uid: string,data: any){
+    const collection = this.database.collection(path);
+    return collection.doc(uid).set(data);
+  }
 
-  // Método para agregar un usuario a Firestore
-  async agregarUsuario(usuario: any) {
-    try {
-      // Agrega un documento a la colección 'usuarios'
-      const docRef = await addDoc(collection(this.firestore, 'usuarios'), usuario);
-      console.log('Usuario agregado con ID:', docRef.id);
-      return docRef;
-    } catch (error) {
-      console.error('Error al agregar usuario:', error);
-      throw error;
-    }
+  crearDoc2(enlace: string, idDoc: string, data: any) {
+    const document = doc(this.firestore, `${enlace}/${idDoc}`);
+    return setDoc(document, data);
   }
 }
