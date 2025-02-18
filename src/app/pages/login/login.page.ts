@@ -1,5 +1,7 @@
 import { Component} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FirebaseAuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginPage {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: FirebaseAuthService,
+    private router: Router,
+
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -21,6 +28,18 @@ export class LoginPage {
     if (this.loginForm.valid) {
       console.log('Formulario enviado:', this.loginForm.value);
       // Aquí iría la lógica de autenticación
+    }
+  }
+
+  login(){
+    if (this.loginForm.valid) {
+      const {email,password}= this.loginForm.getRawValue();
+      this.auth.login(email,password)
+      .then(()=>{
+        this.router.navigate(['/home'])
+      }).catch(error=>{
+        console.log("error de credenciales")
+      })
     }
   }
 }
