@@ -37,6 +37,7 @@ export class LoginPage {
       this.auth.login(email,password)
       .then(()=>{
         this.router.navigate(['/home'])
+        this.loginForm.reset();
       }).catch(error=>{
         console.log("error de credenciales")
       })

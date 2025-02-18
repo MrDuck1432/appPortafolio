@@ -1,28 +1,41 @@
 import { Injectable } from '@angular/core';
-import { signInWithEmailAndPassword,Auth} from '@angular/fire/auth';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, onAuthStateChanged, User } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseAuthService {
 
-  constructor(
-    public auth: AngularFireAuth,
-    private afAuth:Auth,
-  ) { }
+  constructor(private afAuth: Auth) {}
 
-  registrar(email: string,password:string){
-    return this.auth.createUserWithEmailAndPassword(email,password)
+  // Registrar un nuevo usuario
+  registrar(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.afAuth, email, password);
   }
 
-  async getUid(){
-    const user = await this.auth.currentUser;
-    return user?.uid;
+  // Obtener el UID del usuario autenticado
+  getUid(): string | null {
+    return this.afAuth.currentUser?.uid ?? null;
   }
 
-  async login(email: string, password: string){
+  // Iniciar sesión
+  async login(email: string, password: string) {
     const credentials = await signInWithEmailAndPassword(this.afAuth, email, password);
     return credentials;
+  }
+
+  // Cerrar sesión
+  logout() {
+    return signOut(this.afAuth);
+  }
+
+  // Obtener el estado de autenticación como observable
+  getAuthState(): Observable<User | null> {
+    return new Observable((observer) => {
+      onAuthStateChanged(this.afAuth, (user) => {
+        observer.next(user);
+      });
+    });
   }
 }

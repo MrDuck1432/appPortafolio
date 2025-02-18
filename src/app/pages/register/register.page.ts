@@ -50,7 +50,8 @@ export class RegisterPage{
       const uid2= '01'
       const data= {nombre: 'prueba',precio: 30}
       if (uid2 !== undefined) {
-        this.firestore.crearDoc2(path,uid!, valores);//revisar
+        this.firestore.crearDoc(path,uid!, valores);//revisar
+        this.router.navigate(['/login']);
       } else {
         console.error("UID no disponible");
       }
