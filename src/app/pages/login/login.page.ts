@@ -43,4 +43,14 @@ export class LoginPage {
       })
     }
   }
+//borrar
+//borrar
+  autoCompletar() {
+    this.loginForm.patchValue({
+      email: 'seba6@seba.com',
+      password: '12345678'
+    });
+  }
+//borrar
+//borrar
 }
